@@ -34,29 +34,32 @@ Enfocando mis experiencias a funcionar de forma sistémica y más automátizada,
 
 **Inputs**
 
-- Botón A
-- Botón B
-- Acelerometro
-- Puerto 
+- **Botón A**, 
+- **Botón B**
+- **Acelerometro**
+- **Comunicación Serial**
 
 **Outputs**
 
-- Serial Data
-- Display
+- **Comunicación Serial**
+- **Display**
 
 ### PC
 
 **Inputs**
 
-- Botón Send Love
+- **Botón Send Love**
+- **Comunicación Serial**
 
 **Outputs**
 
-- Serial Data
+- **Comunicación Serial**
 
 ### Proceso
 
-***
+Se tienen dos sistemas independientes conectados por un cable de datos, al ser independientes se les atribuye sus propias caracteristicas de procesamiento y de accesibilidad.
+
+Despues de conectar el dispositivo Microbit a p5.js via web, Se puede interactuar desde ambos dispositivos por medio de los inputs físicos (botónes), estos generaran una reescritura de las instrucciones (código) para generar un output en forma de información **serial** a través del puerto. El otro dispositivo recibe el **serial** como input para generar un output sensorial.
 
 ## Actividad 4
 
