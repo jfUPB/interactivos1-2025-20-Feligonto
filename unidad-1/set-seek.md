@@ -70,15 +70,43 @@ Despues de conectar el dispositivo Microbit a p5.js via web, Se puede interactua
 - **Copia el código de tu programa en la bitácora (recuerda insertarlo usando markdown y el lenguaje javascript).**
 
 ```js
+let posSq;
+let velSq;
+
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(300,400);
+  // console.log("Hola");
+  posSq = createVector(147, 350);
+  velSq = createVector(0, -20);
 }
 
+let t1=0;
+let t2=0;
+let pos2x;
+
 function draw() {
-  background(220);
+  background(120,120);
+  
+  let pos1 = createVector(100*sin(t1/20)+175, 0);
+  let pos2 = createVector(100*sin(t1/20)+147, 0);
+  let pos3 = createVector(100*sin(t1/20)+119, 0);
+  
+  posSq.add(velSq);
+  
+  if (posSq.y < 0) {
+    posSq.y= 350;
+    posSq.x= pos2.x
+  }
+  
+  triangle(pos1.x, 375, pos2.x, 350, pos3.x, 375);
+  square(posSq.x,posSq.y,10)
+  t1++;
+  t2++;
 }
 ```
 
 - **Muestra una captura de pantalla del resultado de tu programa.**
 
-<img width="632" height="635" alt="image" src="https://github.com/user-attachments/assets/9eb18d88-8c68-4007-9e4b-a7a5c7513d82" />
+<img width="472" height="641" alt="image" src="https://github.com/user-attachments/assets/cceca9e3-028e-431d-8059-1ff6e305df78" />
+
+<img width="476" height="637" alt="image" src="https://github.com/user-attachments/assets/73624f9e-ee63-4076-a3a3-8e3252e32600" />
