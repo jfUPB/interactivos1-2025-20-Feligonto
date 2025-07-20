@@ -16,7 +16,7 @@ Realizar experiencias enfocadas a la atracción sensorial y emocional de posible
 
 - **¿Qué es el diseño/arte generativo?**
 
-Es la capacidad de comunicación y expresión a partir de sistemas varios, donde un artista plasma una obra usando una o varias herramientas de forma ordenada, mediante la práctica del uso de sistemas autonomos o semi autonomos.
+Es la capacidad de comunicación y expresión a partir de sistemas varios, donde un artista plasma una obra usando una o varias herramientas de forma ordenada, mediante la práctica del uso de sistemas autonomos o semi-autonomos.
 
 Diferenciando entre diseño y arte generativo, En el arte generativo se establecen un conjunto de reglas propias donde pueden haber variaciones que logran diversificar un producto sin limitaciones explicitas, solo la creatividad y la imaginación.
 
