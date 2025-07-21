@@ -34,26 +34,26 @@ Enfocando mis experiencias a funcionar de forma sistémica y más automátizada,
 
 **Inputs**
 
-- **Botón A**, 
-- **Botón B**
-- **Acelerometro**
-- **Comunicación Serial**
+- **Botón A**, Input de presion fisica con nombre A. 
+- **Botón B**, Input de presion fisica con nombre B.
+- **Acelerometro**, Input detector de vibración fisica.
+- **Comunicación Serial**, Recibimiento de información a traves del puerto Serial.
 
 **Outputs**
 
-- **Comunicación Serial**
-- **Display**
+- **Comunicación Serial**, Transferencia de información a traves del puerto Serial.
+- **Display**, Pequeña pantalla compuesta con varias luces programables.
 
 ### PC
 
 **Inputs**
 
-- **Botón Send Love**
-- **Comunicación Serial**
+- **Botón Send Love**, botón virtual de la interfaz de *p5.js*.
+- **Comunicación Serial**, Recibimiento de información a traves del puerto Serial.
 
 **Outputs**
 
-- **Comunicación Serial**
+- **Comunicación Serial**, Transferencia de información a traves del puerto Serial.
 
 ### Proceso
 
