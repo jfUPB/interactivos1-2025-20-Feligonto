@@ -4,11 +4,11 @@
 
 ### Actividad 5
 
-El sistema tiene integrado en el programa del micro:bit los botónes que actuan como input principal del microbit el cual genera un output serial que genera un input para el editor el cual actua segun la información que recibe. De esta forma es que al validar que un botón fue presionado, por medio de la función is_pressed y el registro serial (baudrate), el display del editor es capaz de cambiar de color en función del dato recibido en tiempo real.
+El sistema tiene integrado en el programa del micro:bit los botónes que actuan como input principal del microbit el cual genera un output serial que a su vez genera un input para el editor el cual actua según la información que recibe. De esta forma es que al validar que un botón fue presionado, por medio de la función is_pressed y el registro serial (uart), el display del editor es capaz de cambiar de color en función del dato recibido en tiempo real.
 
 ### Actividad 6
 
-
+[**Código p5.js**](https://editor.p5js.org/Feligonto/sketches/Pc9BI6wOb)
 
 ```js
 let port;
@@ -64,3 +64,21 @@ let port;
     }
 ```
 
+**Código micro:bit**
+
+```python
+from microbit import *
+
+uart.init(baudrate=115200)
+
+while True:
+    if button_a.is_pressed():
+        uart.write('A')
+    else:
+        if button_b.is_pressed():
+            uart.write('B')
+        else:
+            uart.write('N')
+        
+    sleep(100)
+```
