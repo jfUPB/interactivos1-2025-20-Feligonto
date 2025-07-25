@@ -27,9 +27,7 @@ La diferencia fundamental es el uso de sistemas y programas como herramienta de 
 
 - **Imagina que quieres que un círculo en p5.js cambie a un color aleatorio cada vez que sacudes el micro:bit. Describe qué tendrías que programar en el micro:bit y qué tendrías que programar en p5.js para lograrlo**
 
-En microbit tendría que crear una variable que permita el acceso al acelerometro del *micro:bit*, luego un condicional que lea el retorno del acelerómetro y reescriba los datos, concicionando con la función `is.pressed()`, a la letra C, y N en su defecto. Luego en p5.js, declaramos las variables globales color y port, en la funcion setup creamos nuestro canvas e inicializamos la variable port almacenandole un serial con `createSerial()`, en la función `draw()`
-
-... *por terminar*
+En *micro:bit* tendría que crear una variable que permita el acceso al acelerómetro, luego un condicional que lea su retorno y reescriba los datos, concicionando con la función `is.pressed()`, a la letra C, y N en su defecto. Luego en p5.js, declaramos las variables globales `coloractual`, `color` y `port`. En la funcion `setup()` creamos nuestro canvas e inicializamos la variable `port` almacenandole un serial con `createSerial()`. En la función `draw()`, Inicializamos color almacenandole la función `fill()` y añadiendole la función `random(225)` en sus 3 componentes, condicionamos el cambio de color dependiendo del dato que reciba por el puerto serial, en este caso si recibe C accederá a hacer el cambio de color pero si recibe N permanecerá en el último color (coloractual), creamos el círculo con su respectiva posición y almacenamos color en color actual.
 
 **Parte 2: reflexión sobre tu proceso (Metacognición)**
 
