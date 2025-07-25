@@ -4,11 +4,17 @@
 
 ### Actividad 5
 
+- **Explica cómo funciona el sistema físico interactivo que acabamos de crear**
+
 El sistema tiene integrado en el programa del micro:bit los botónes que actuan como input principal del microbit el cual genera un output serial que a su vez genera un input para el editor el cual actua según la información que recibe. De esta forma es que al validar que un botón fue presionado, por medio de la función is_pressed y el registro serial (uart), el display del editor es capaz de cambiar de color en función del dato recibido en tiempo real.
 
 ### Actividad 6
 
+- **Escribe el enlace a tu programa en el editor de p5.js**
+
 [**Código p5.js**](https://editor.p5js.org/Feligonto/sketches/Pc9BI6wOb)
+
+- **Copia el código de tu programa en la bitácora (recuerda insertarlo usando markdown y el lenguaje javascript)**
 
 ```js
 let port;
@@ -63,6 +69,8 @@ let port;
         }
     }
 ```
+
+- **Copia el código del micro:bit en la bitácora (recuerda insertarlo usando markdown y el lenguaje python)**
 
 **Código micro:bit**
 
