@@ -19,7 +19,7 @@ Según el sistema construido en la Actividad 06, los inputs son los botónes A y
 
 - **¿Cuál es la función de la línea uart.write('A') en el código del micro:bit y qué función en p5.js se encarga de “escuchar” ese mensaje?**
 
-`uart.write('A')` reescribe los datos enviados por *micro:bit*, y la función port.read(1) los lee para ser reescritos en la comunicación serial.
+`uart.write('A')` reescribe los datos enviados por *micro:bit*, y la función `port.read(1)` los lee para ser reescritos en la comunicación serial.
 
 - **¿Cuál es la diferencia fundamental entre el arte/diseño tradicional y el arte/diseño generativo?**
 
@@ -27,7 +27,9 @@ La diferencia fundamental es el uso de sistemas y programas como herramienta de 
 
 - **Imagina que quieres que un círculo en p5.js cambie a un color aleatorio cada vez que sacudes el micro:bit. Describe qué tendrías que programar en el micro:bit y qué tendrías que programar en p5.js para lograrlo**
 
-En microbit tendría que crear una variable que permita el acceso al acelerometro del *micro:bit*, luego un condicional que lea el retorno del acelerómetro y reescriba los datos, concicionando con la función is.pressed(), a la letra C, y N en su defecto. Luego en p5.js, declaramos las variables globales color y port, en la funcion setup creamos nuestro canvas e inicializamos la variable port almacenandole un serial con createSerial(), en la función draw 
+En microbit tendría que crear una variable que permita el acceso al acelerometro del *micro:bit*, luego un condicional que lea el retorno del acelerómetro y reescriba los datos, concicionando con la función `is.pressed()`, a la letra C, y N en su defecto. Luego en p5.js, declaramos las variables globales color y port, en la funcion setup creamos nuestro canvas e inicializamos la variable port almacenandole un serial con `createSerial()`, en la función `draw()`
+
+... *por terminar*
 
 **Parte 2: reflexión sobre tu proceso (Metacognición)**
 
@@ -41,7 +43,11 @@ En microbit tendría que crear una variable que permita el acceso al acelerometr
 
 ### Actividad 08
 
+- **Tu compañero resolvió el problema de manera diferente a ti, qué hizo diferente, qué aprendiste de su solución. En tu bitácora documenta lo anterior y escribe, como si le estuvieras explicando, lo que tú hiciste y por qué es diferente a lo que hizo tu compañero.**
 
+Mi compañero Daniel Mendoza, uso las palabra reservada ***width*** para la ubicación de su objeto, un elipse (`ellipse()`) al que le asignó además un color con el formato rgb. Me recordó la reescritura que usó a la hora de enviar datos que no importa que datos especificos se envíen siempre y cuando coicidan. Usó la función constrain para delimitar el movimiento del elipse lo cual me parece  muy adecuado a la hora de pensarlo como una experiencia interactiva.
+
+En mi caso uso un vector (`createVector()`) para ajustar la posición de mi círculo (`circle()`) donde determino su posición en x con una variable `posactual`, su posición en y con un valor literal (200) que es la mitad exacta del ancho total y su tamaño con valor 25. Usé en la reescritura de datos los nombres literales de los botónes. No hice una delimitación alguna, respecto al movimiento.
 
 ### Actividad 09
 
