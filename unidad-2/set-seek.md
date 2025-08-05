@@ -46,4 +46,15 @@ Eventos:
 2. Detección de botón activado.
 
 Acciones:
-1. 
+1. Cambio de display
+2. Inicio de contador `utime.ticks_ms()`
+3. Cambio de intervalo
+4. Cambio de estado
+
+**- Describe y aplica al menos 3 vectores de prueba para el programa.**
+
+Estado - Evento - Acción
+
+1. `STATE_HAPPY` - `utime.ticks_diff(utime.ticks_ms(), start_time) > interval` - `display.show(Image.SMILE)`
+2. `STATE_SAD` - `button_a.was_pressed()` - `interval = SMILE_INTERVAL`
+3. `STATE_INIT` - `current_state == STATE_INIT` - `current_state = STATE_HAPPY`
