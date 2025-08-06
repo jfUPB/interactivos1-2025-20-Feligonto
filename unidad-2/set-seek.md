@@ -25,7 +25,90 @@ Las acciones son determinar el brillo del foco, sea alto o nulo.
 
 ### Actividad 2
 
+**- Escribe el código que soluciona este problema en tu bitácora.**
 
+```python
+from microbit import *
+import utime
+
+INIT_STATE = 0
+ROJO_STATE = 1
+AMARILLO1_STATE = 2
+VERDE_STATE = 3
+AMARILLO2_STATE = 4
+
+ROJO_INTERVAL = 1000
+AMARILLO1_INTERVAL = 300
+VERDE_INTERVAL = 1000
+AMARILLO2_INTERVAL = 300
+
+current_state = INIT_STATE
+start_time = 0
+interval = 0
+
+while True:
+    if current_state == INIT_STATE:
+        
+        display.set_pixel(0,0,9)
+        
+        start_time = utime.ticks_ms()
+        interval = ROJO_INTERVAL
+        current_state = ROJO_STATE
+        
+    elif current_state == ROJO_STATE:
+        
+        while utime.ticks_diff(utime.ticks_ms(), start_time) < interval:
+            display.set_pixel(0,0,9)
+        if utime.ticks_diff(utime.ticks_ms(), start_time) > interval:
+            display.set_pixel(0,0,0)
+
+            start_time = utime.ticks_ms()
+            interval = AMARILLO1_INTERVAL
+            current_state = AMARILLO1_STATE
+            
+    elif current_state == AMARILLO1_STATE:
+        while utime.ticks_diff(utime.ticks_ms(), start_time) < interval:
+            display.set_pixel(0,1,9)
+        if utime.ticks_diff(utime.ticks_ms(), start_time) > interval:
+            display.set_pixel(0,1,0)
+            
+            start_time = utime.ticks_ms()
+            interval = VERDE_INTERVAL
+            current_state = VERDE_STATE
+        
+    elif current_state == VERDE_STATE:
+        while utime.ticks_diff(utime.ticks_ms(), start_time) < interval:
+            display.set_pixel(0,2,9)
+        if utime.ticks_diff(utime.ticks_ms(), start_time) > interval:
+            display.set_pixel(0,2,0)
+
+            
+            start_time = utime.ticks_ms()
+            interval = AMARILLO2_INTERVAL
+            current_state = AMARILLO2_STATE
+
+    elif current_state == AMARILLO2_STATE:
+        while utime.ticks_diff(utime.ticks_ms(), start_time) < interval:
+            display.set_pixel(0,1,9)
+        if utime.ticks_diff(utime.ticks_ms(), start_time) > interval:
+            display.set_pixel(0,1,0)
+
+            start_time = utime.ticks_ms()
+            interval = ROJO_INTERVAL
+            current_state = ROJO_STATE
+```
+
+**- Identifica los estados, eventos y acciones en tu código.**
+
+Estados:
+1. `ROJO_STATE`
+2. `AMARILLO1_STATE`
+3. `VERDE_STATE`
+4. `AMARILLO2_STATE`
+
+Eventos:
+1. `utime.ticks_diff(utime.ticks_ms(), start_time) < interval`
+2. `utime.ticks_diff(utime.ticks_ms(), start_time) > interval`
 
 ### Actividad 3
 
