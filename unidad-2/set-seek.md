@@ -111,6 +111,12 @@ Eventos:
 1. `utime.ticks_diff(utime.ticks_ms(), start_time) < interval` 
 2. `utime.ticks_diff(utime.ticks_ms(), start_time) > interval`
 
+Acciones:
+1. `display.set()` condicionandose con los eventos, implementa un foco al que se le cambia su estado segun corresponda.
+2. `start_time = utime.ticks_ms()` determina el comienzo de un conteo.
+3. `interval` para ajustar el intervalo a usar.
+4. `current_state` cambia el estado en que se encuentra el proceso.
+
 ### Actividad 3
 
 **- Explica por qué decimos que este programa permite realizar de manera concurrente varias tareas.**
@@ -142,4 +148,5 @@ Estado - Evento - Acción
 1. `STATE_HAPPY` - `utime.ticks_diff(utime.ticks_ms(), start_time) > interval` - `display.show(Image.SMILE)`
 2. `STATE_SAD` - `button_a.was_pressed()` - `interval = SMILE_INTERVAL`
 3. `STATE_INIT` - `current_state == STATE_INIT` - `current_state = STATE_HAPPY`
+
 
