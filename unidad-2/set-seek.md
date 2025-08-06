@@ -101,13 +101,14 @@ while True:
 **- Identifica los estados, eventos y acciones en tu código.**
 
 Estados:
-1. `ROJO_STATE`
-2. `AMARILLO1_STATE`
-3. `VERDE_STATE`
-4. `AMARILLO2_STATE`
+1. `INIT_STATE` estado en el que inicia el programa.
+2. `ROJO_STATE` estado del foco en posicion superior.
+3. `AMARILLO1_STATE` estado del foco en posicion meddia.
+4. `VERDE_STATE` estado del foco en posicion inferior.
+5. `AMARILLO2_STATE` estado del foco en posicion media.
 
 Eventos:
-1. `utime.ticks_diff(utime.ticks_ms(), start_time) < interval`
+1. `utime.ticks_diff(utime.ticks_ms(), start_time) < interval` 
 2. `utime.ticks_diff(utime.ticks_ms(), start_time) > interval`
 
 ### Actividad 3
@@ -119,10 +120,10 @@ Esto se dice ya que existen tareas en el programa que pueden activarse correctam
 **- Identifica los estados, eventos y acciones en el programa.**
 
 Estados: 
-1. STATE_INIT
-2. STATE_HAPPY
-3. STATE_SMILE
-4. STATE_SAD
+1. `STATE_INIT` estado en el que inicia el programa.
+2. `STATE_HAPPY` estado de cara feliz con ojos.
+3. `STATE_SMILE` estado de sonrisa.
+4. `STATE_SAD` estado de cara triste con ojos.
 
 Eventos:
 1. Paso del tiempo determinado para cada estado, determinado por las variables: `HAPPY_INTERVAL`, `SMILE_INTERVAL` y `SAD_INTERVAL`.
@@ -141,3 +142,4 @@ Estado - Evento - Acción
 1. `STATE_HAPPY` - `utime.ticks_diff(utime.ticks_ms(), start_time) > interval` - `display.show(Image.SMILE)`
 2. `STATE_SAD` - `button_a.was_pressed()` - `interval = SMILE_INTERVAL`
 3. `STATE_INIT` - `current_state == STATE_INIT` - `current_state = STATE_HAPPY`
+
