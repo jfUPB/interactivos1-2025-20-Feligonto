@@ -148,5 +148,3 @@ Estado - Evento - Acción
 1. `STATE_HAPPY` - `utime.ticks_diff(utime.ticks_ms(), start_time) > interval` - `display.show(Image.SMILE)`
 2. `STATE_SAD` - `button_a.was_pressed()` - `interval = SMILE_INTERVAL`
 3. `STATE_INIT` - `current_state == STATE_INIT` - `current_state = STATE_HAPPY`
-
-
