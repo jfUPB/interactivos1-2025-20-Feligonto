@@ -2,7 +2,7 @@
 
 ## Código
 
-[Enlace a la aplicación a modifica](https://editor.p5js.org/generative-design/sketches/M_1_5_02)
+[Enlace a la aplicación a modificar](https://editor.p5js.org/generative-design/sketches/M_1_5_02)
 
 Código a modificar:
 
@@ -178,6 +178,7 @@ var myp5 = new p5(sketch);
 ## Video
 
 [Video demostratativo](URL)
+
 
 
 
