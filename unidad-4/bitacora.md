@@ -81,6 +81,7 @@ var sketch = function(p) {
   let microBitAState = false;
   let microBitBState = false;
   let prevMicroBitX = 0;
+  let prevMicroBitY = 0;
   let prevMicroBitAState = false;
   let prevMicroBitBState = false;
 
@@ -143,12 +144,12 @@ var sketch = function(p) {
   // Function to handle micro:bit events
   function updateMicrobitControls() {
       // Control drawMode with accelerometer X
-      if (microBitX >= 500 && prevMicroBitX < 500) {
+      if (microBitX >= 700 && prevMicroBitX < 700) {
         drawMode = 1;
-        p.background(255);
-      } else if (microBitX <= -500 && prevMicroBitX > -500) {
+      }
+    
+      if (microBitY <= -700 && prevMicroBitY > -700) {
         drawMode = 2;
-        p.background(255);
       }
 
       // Control new noise seed with button A
@@ -178,6 +179,7 @@ var myp5 = new p5(sketch);
 ## Video
 
 [Video demostratativo](URL)
+
 
 
 
