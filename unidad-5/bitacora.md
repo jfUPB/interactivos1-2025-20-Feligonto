@@ -77,15 +77,71 @@ ya no se mandan caracteres, sino los valores codificados en bytes fijos.
 
 <img width="1199" height="204" alt="Captura de pantalla 2025-10-01 145051" src="https://github.com/user-attachments/assets/234d0acb-da88-4a0a-b1cc-583607496e4c" />
 
-""
+se observa de forma mas clara cada uno de los bytes que se envian, se deduce que los 2 primeros bytes son el valor de xValue, los proximos 2 son el valor de yValue, el siguiente es el de aState y el último el de bState.
 
----
+- ¿Qué ventajas y desventajas ves en usar un formato binario en lugar de texto en ASCII?
+
+ASCII > fácil de leer y depurar, pero más lento y pesado.
+
+Binario > eficiente y preciso, pero ilegible para la vista humana y menos flexible.
+
+- ¿Cuántos bytes se están enviando por mensaje?
+
+6 bytes por paquete.
+
+- ¿Cómo se relaciona esto con el formato '>2h2B'?
+
+2h > (2 de xValue, 2 de yValue), 2B > (1 de aState y 1 de bState). 
+
+- ¿Qué significa cada uno de los bytes que se envían?
+
+**Primeros 2 bytes → xValue (h)**
+
+Tipo: entero corto con signo (16 bits).
+
+Representa la aceleración en el eje X del micro:bit.
+
+**Siguientes 2 bytes → yValue (h)**
+
+Tipo: entero corto con signo (16 bits).
+
+Representa la aceleración en el eje Y.
+
+**Quinto byte → aState (B)**
+
+Tipo: entero sin signo de 1 byte.
+
+Representa el estado del botón A.
+
+**Sexto byte → bState (B)**
+
+Tipo: entero sin signo de 1 byte.
+
+Representa el estado del botón B.
+
+- ¿Cómo se verían esos números en el formato '>2h2B'?
+
+En hexagecimal un valor positivo se escribe como 00 o 0000 0000 en binario, y el valor negativo FF en HEX y 1111 1111 en binario.
+
+**ASCII y STRUCT**
 
 <img width="220" height="207" alt="image" src="https://github.com/user-attachments/assets/b03c4eb8-2e1d-4aa7-a671-d5e8218c8caf" />
 
-¿Qué diferencias ves entre los datos en ASCII y en binario? 
-¿Qué ventajas y desventajas ves en usar un formato binario en lugar de texto en ASCII? 
-¿Qué ventajas y desventajas ves en usar un formato ASCII en lugar de binario?
-Explica por qué en la unidad anterior teníamos que enviar la información delimitada y además marcada con un salto de línea y ahora no es necesario.
-Explica por qué en la unidad anterior teníamos que enviar la información delimitada y además marcada con un salto de línea y ahora no es necesario.
+- ¿Qué diferencias ves entre los datos en ASCII y en binario?
+
+
+
+- ¿Qué ventajas y desventajas ves en usar un formato binario en lugar de texto en ASCII?
+
+
+
+- ¿Qué ventajas y desventajas ves en usar un formato ASCII en lugar de binario?
+
+
+
+- Explica por qué en la unidad anterior teníamos que enviar la información delimitada y además marcada con un salto de línea y ahora no es necesario.
+
+
+
+- Explica por qué en la unidad anterior teníamos que enviar la información delimitada y además marcada con un salto de línea y ahora no es necesario.
 
