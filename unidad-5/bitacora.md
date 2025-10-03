@@ -441,3 +441,5 @@ var sketch = function(p) {
 
 var myp5 = new p5(sketch);
 ```
+
+Sugiero para mi nota 3.6 pues lleve a cabo todas las actividades propuestas, con una profundidad minima.
