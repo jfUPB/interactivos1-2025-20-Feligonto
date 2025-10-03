@@ -129,19 +129,67 @@ En hexagecimal un valor positivo se escribe como 00 o 0000 0000 en binario, y el
 
 - ¿Qué diferencias ves entre los datos en ASCII y en binario?
 
-
+El tipo de caracteres usados, la claridad del orden de los datos, la longitud de los paquetes.
 
 - ¿Qué ventajas y desventajas ves en usar un formato binario en lugar de texto en ASCII?
 
-
+La rapidez de traducción y menor uso de memoria.
 
 - ¿Qué ventajas y desventajas ves en usar un formato ASCII en lugar de binario?
 
+El entendimiento de los datos en tiempo real, la organización de los datos.
 
-
-- Explica por qué en la unidad anterior teníamos que enviar la información delimitada y además marcada con un salto de línea y ahora no es necesario.
-
-
+### Actividad 3
 
 - Explica por qué en la unidad anterior teníamos que enviar la información delimitada y además marcada con un salto de línea y ahora no es necesario.
 
+En texto se necesitan delimitadores porque los números tienen longitud variable.
+
+En binario no hacen falta delimitadores porque el tamaño de cada campo está definido en el formato (h=2 bytes, B=1 byte).
+
+- Compara el código de la unidad anterior relacionado con la recepción de los datos seriales que ves ahora. ¿Qué cambios observas?
+
+Antes habia comunicación en texto ASCII (más legible pero más lenta y pesada) y ahora hay comunicación en binario (más compacta, eficiente, precisa), por eso cambió la lectura de `readUntil("\n") + split` a `readBytes(6) + DataView`.
+
+- ¿Qué ves en la consola? ¿Por qué crees que se produce este error?
+<img width="800" height="714" alt="Captura de pantalla 2025-10-01 153749" src="https://github.com/user-attachments/assets/f3e92e9b-ca38-4561-b98a-e46f6a705324" />
+
+Veo bastantes valores sobre extendidos, creeria que el proceso de detección de valores se sobrepone al de el envío de paquetes.
+
+- Analiza el código, observa los cambios. Ejecuta y luego observa la consola. ¿Qué ves?
+
+<img width="862" height="731" alt="Captura de pantalla 2025-10-01 153851" src="https://github.com/user-attachments/assets/a20fc5ca-1359-4f9b-a44d-b88ebafe035d" />
+
+Ahora parece enviar datos correctamente.
+
+- ¿Qué cambios tienen los programas? y ¿Qué puedes observar en la consola del editor de p5.js?
+
+<img width="891" height="448" alt="Captura de pantalla 2025-10-01 153949" src="https://github.com/user-attachments/assets/967af043-2cc1-4780-b24f-d6dde27bf3fc" />
+
+En el primero se usan las coordenadas crudas del micro:bit, imprime los valores recibidos → más orientado a la depuración y prueba de comunicación.
+
+El segundo adapta las coordenadas al canvas (centrando), no imprime debug → más enfocado en la visualización artística.
+
+En la consola se ven bien reflejadas las funciones de los botones.
+
+### Actividad 4
+
+Codigo en microbit
+```
+from microbit import *
+import struct
+
+uart.init(115200)
+display.set_pixel(0, 0, 9)
+
+while True:
+    xValue = accelerometer.get_x()
+    yValue = accelerometer.get_y()
+    aState = button_a.is_pressed()
+    bState = button_b.is_pressed()
+    data = struct.pack('>2h2B', xValue, yValue, int(aState), int(bState))
+    checksum = sum(data) % 256
+    packet = b'\xAA' + data + bytes([checksum])
+    uart.write(packet)
+    sleep(100)
+```
