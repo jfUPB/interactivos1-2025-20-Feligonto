@@ -179,6 +179,7 @@ En la consola se ven bien reflejadas las funciones de los botones.
 ### Actividad 4
 
 Codigo en microbit
+
 ```
 from microbit import *
 import struct
@@ -198,3 +199,245 @@ while True:
     sleep(100)
 ```
 
+**Código antes**
+
+```
+'use strict';
+
+var sketch = function(p) {
+  var agents = [];
+  var agentCount = 4000;
+  var noiseScale = 300;
+  var noiseStrength = 10;
+  var overlayAlpha = 10;
+  var agentAlpha = 90;
+  var strokeWidth = 0.3;
+  var drawMode = 1;
+
+  // Variables for serial communication
+  let port;
+  let connectBtn;
+  let microBitX = 0;
+  let microBitY = 0;
+  let microBitAState = false;
+  let microBitBState = false;
+  let prevMicroBitX = 0;
+  let prevMicroBitY = 0;
+  let prevMicroBitAState = false;
+  let prevMicroBitBState = false;
+
+  p.setup = function() {
+    p.createCanvas(p.windowWidth, p.windowHeight);
+
+    for (var i = 0; i < agentCount; i++) {
+      agents[i] = new Agent();
+    }
+    
+    // Initialize serial communication and button
+    port = p.createSerial();
+    connectBtn = p.createButton("Conectar micro:bit");
+    connectBtn.position(p.width - 160, 20); // Posiciona el botón en la esquina superior derecha
+    connectBtn.mousePressed(connectBtnClick);
+  };
+
+  p.draw = function() {
+    p.fill(255, overlayAlpha);
+    p.noStroke();
+    p.rect(0, 0, p.width, p.height);
+
+    // Read and process data from micro:bit
+    if (port.availableBytes() > 0) {
+      let data = port.readUntil("\n");
+      if (data) {
+        data = data.trim();
+        let values = data.split(",");
+        if (values.length === 4) {
+          microBitX = p.int(values[0]);
+          microBitY = p.int(values[1]);
+          microBitAState = values[2].toLowerCase() === "true";
+          microBitBState = values[3].toLowerCase() === "true";
+        }
+      }
+    }
+
+    // Update controls with micro:bit data
+    updateMicrobitControls();
+
+    // Draw agents
+    p.stroke(0, agentAlpha);
+    for (var i = 0; i < agentCount; i++) {
+      if (drawMode == 1) agents[i].update1(noiseScale, noiseStrength, strokeWidth);
+      else agents[i].update2(noiseScale, noiseStrength, strokeWidth);
+    }
+    
+    // Update previous states for next iteration
+    prevMicroBitX = microBitX;
+    prevMicroBitAState = microBitAState;
+    prevMicroBitBState = microBitBState;
+    
+    if (!port.opened()) {
+      connectBtn.html("Conectar micro:bit");
+    } else {
+      connectBtn.html("Desconectar");
+    }
+  };
+
+  // Function to handle micro:bit events
+  function updateMicrobitControls() {
+      // Control drawMode with accelerometer X
+      if (microBitX >= 700 && prevMicroBitX < 700) {
+        drawMode = 1;
+      }
+    
+      if (microBitY <= -700 && prevMicroBitY > -700) {
+        drawMode = 2;
+      }
+
+      // Control new noise seed with button A
+      if (microBitAState === true && prevMicroBitAState === false) {
+        p.noiseSeed(p.floor(p.random(10000)));
+      }
+
+      // Control screen clear with button B
+      if (microBitBState === true && prevMicroBitBState === false) {
+        p.background(255);
+      }
+  }
+
+  // Function to handle the click on the connect button
+  function connectBtnClick() {
+    if (!port.opened()) {
+      port.open("MicroPython", 115200);
+    } else {
+      port.close();
+    }
+  }
+
+};
+var myp5 = new p5(sketch);
+```
+
+**Código después**
+
+```
+'use strict';
+
+var sketch = function(p) {
+  var agents = [];
+  var agentCount = 4000;
+  var noiseScale = 300;
+  var noiseStrength = 10;
+  var overlayAlpha = 10;
+  var agentAlpha = 90;
+  var strokeWidth = 0.3;
+  var drawMode = 1;
+
+  // Variables for serial communication
+  let port;
+  let connectBtn;
+  let microBitX = 0;
+  let microBitY = 0;
+  let microBitAState = false;
+  let microBitBState = false;
+  let prevMicroBitX = 0;
+  let prevMicroBitY = 0;
+  let prevMicroBitAState = false;
+  let prevMicroBitBState = false;
+
+  const PACKET_SIZE = 7; // 1 start + 2h + 2B + 1 checksum
+
+  p.setup = function() {
+    p.createCanvas(p.windowWidth, p.windowHeight);
+
+    for (var i = 0; i < agentCount; i++) {
+      agents[i] = new Agent();
+    }
+    
+    port = p.createSerial();
+    connectBtn = p.createButton("Conectar micro:bit");
+    connectBtn.position(p.width - 160, 20);
+    connectBtn.mousePressed(connectBtnClick);
+  };
+
+  p.draw = function() {
+    p.fill(255, overlayAlpha);
+    p.noStroke();
+    p.rect(0, 0, p.width, p.height);
+
+    // Leer paquetes binarios
+    while (port.availableBytes() >= PACKET_SIZE) {
+      let buffer = port.readBytes(PACKET_SIZE);
+      if (buffer && buffer.length === PACKET_SIZE) {
+        if (buffer[0] === 0xAA) { // byte de sincronización
+          let view = new DataView(new Uint8Array(buffer).buffer);
+
+          // Extraer datos
+          let x = view.getInt16(1, false); // big-endian
+          let y = view.getInt16(3, false);
+          let a = view.getUint8(5);
+          let b = view.getUint8(6 - 1); // ojo con índice según checksum
+
+          let checksum = view.getUint8(6);
+          let sum = 0;
+          for (let i = 1; i <= 5; i++) sum += buffer[i];
+          sum = sum % 256;
+
+          if (checksum === sum) {
+            microBitX = x;
+            microBitY = y;
+            microBitAState = (a === 1);
+            microBitBState = (b === 1);
+          } else {
+            console.log("Paquete con checksum inválido");
+          }
+        }
+      }
+    }
+
+    // Actualizar controles
+    updateMicrobitControls();
+
+    // Dibujar agentes
+    p.stroke(0, agentAlpha);
+    for (var i = 0; i < agentCount; i++) {
+      if (drawMode == 1) agents[i].update1(noiseScale, noiseStrength, strokeWidth);
+      else agents[i].update2(noiseScale, noiseStrength, strokeWidth);
+    }
+
+    // Guardar estado previo
+    prevMicroBitX = microBitX;
+    prevMicroBitY = microBitY;
+    prevMicroBitAState = microBitAState;
+    prevMicroBitBState = microBitBState;
+
+    if (!port.opened()) {
+      connectBtn.html("Conectar micro:bit");
+    } else {
+      connectBtn.html("Desconectar");
+    }
+  };
+
+  function updateMicrobitControls() {
+    if (microBitX >= 700 && prevMicroBitX < 700) drawMode = 1;
+    if (microBitY <= -700 && prevMicroBitY > -700) drawMode = 2;
+
+    if (microBitAState === true && prevMicroBitAState === false) {
+      p.noiseSeed(p.floor(p.random(10000)));
+    }
+
+    if (microBitBState === true && prevMicroBitBState === false) {
+      p.background(255);
+    }
+  }
+
+  function connectBtnClick() {
+    if (!port.opened()) {
+      port.open("MicroPython", 115200);
+    } else {
+      port.close();
+    }
+  }
+};
+
+var myp5 = new p5(sketch);
+```
