@@ -65,7 +65,7 @@ year() devuelve el año actual del sistema (en número entero), sirve para crear
 
 ---
 
-**Struct Pack**
+### Actividad 2
 
 - ¿Por qué se ve este resultado?
 
@@ -139,6 +139,8 @@ La rapidez de traducción y menor uso de memoria.
 
 El entendimiento de los datos en tiempo real, la organización de los datos.
 
+---
+
 ### Actividad 3
 
 - Explica por qué en la unidad anterior teníamos que enviar la información delimitada y además marcada con un salto de línea y ahora no es necesario.
@@ -172,6 +174,8 @@ El segundo adapta las coordenadas al canvas (centrando), no imprime debug → m�
 
 En la consola se ven bien reflejadas las funciones de los botones.
 
+---
+
 ### Actividad 4
 
 Codigo en microbit
@@ -193,3 +197,4 @@ while True:
     uart.write(packet)
     sleep(100)
 ```
+
