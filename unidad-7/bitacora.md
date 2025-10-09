@@ -103,3 +103,7 @@ Los dos escritorios verían moverse el círculo sincronizadamente según el movi
 - ¿Qué información útil te proporcionan los mensajes console.log en el servidor durante la ejecución?
 
 Sirven para ver cuándo se conectan o desconectan clientes, monitorear los mensajes que se envían, incluyendo su contenido (coordenadas, tipo de evento, etc.) y para depurar errores de conexión o sincronización en tiempo real. Es decir, los console.log funcionan como herramientas de diagnóstico para entender el flujo de comunicación entre el móvil, el servidor y los escritorios.
+
+### Actividad 4
+
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/7f397cf6-16d9-4ab3-8d23-05f10a298b29" />
