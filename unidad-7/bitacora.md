@@ -322,4 +322,13 @@ server.listen(PORT, () => {
 
 ### Autoevaluación
 
+**Actividad 1:** Leí detalladamente cada información existente y basé mis respuestas en los conocimientos adquieridos por la lectura y por averiguaciones externas. Practicamente, la actividad fluyó correctamente.
+
+**Actividad 2:** Leí detalladamente cada información existente y basé mis respuestas en los conocimientos adquieridos por la lectura y por averiguaciones externas.
+
+**Actividad 3:** Analicé detenidamente las preguntas existentes para hayar una respuesta compuesta entre mis opiniones personales y conocimientos externos adquiridos.
+
+**Actividad 4:** El gráfico representa de forma simple y sencilla, el flujo de datos a traves de los tres componentes: móvil, servidor y escritorio.
+
 Todas las actividades fueron llevadas a cabo satisfactoriamente, por lo que la nota sugerida es 5.
+
