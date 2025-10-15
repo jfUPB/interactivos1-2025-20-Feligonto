@@ -108,6 +108,8 @@ Sirven para ver cuándo se conectan o desconectan clientes, monitorear los mensa
 
 ### Actividad 5
 
+El diseño que llevé a cabo fue primero idear la forma en que el usuario pudiese ineractuar con cada "beat" de la canción seleccionada, y las ondas expansivas me pareción un concepto visualmente satisfactorio. La forma que pensé de identificar estos beats era por medio del análisis FFT (Fast Fourier Transform) contenido en la libreria p5.sound, y la forma de diferenciar los componentes altos  y bajos fuese por medio de los colores de las mimas ondas expansivas. Estas ondas aparecerian en un lugar aleatorio entre un espacio designado para los altos o para los bajos según corresponda.
+
 index.html (desktop)
 
 ```html
@@ -317,3 +319,7 @@ server.listen(PORT, () => {
 });
 
 ```
+
+### Autoevaluación
+
+Todas las actividades fueron llevadas a cabo satisfactoriamente, por lo que la nota sugerida es 5.
