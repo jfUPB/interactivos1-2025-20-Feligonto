@@ -1,7 +1,5 @@
 # Evidencias de la unidad 7
 
-Libreria p5.sound contiene funciones como FFT a la cual se le puede conectar un audio, y de ahi generar el programa (estudiar con IA).
-
 ### Actividad 1
 
 - ¿Qué URL de Dev Tunnels obtuviste? ¿Por qué crees que necesitamos usar esta URL en lugar de http://localhost:3000 o la IP local de tu computador para que el celular se conecte?
@@ -107,3 +105,215 @@ Sirven para ver cuándo se conectan o desconectan clientes, monitorear los mensa
 ### Actividad 4
 
 <img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/7f397cf6-16d9-4ab3-8d23-05f10a298b29" />
+
+### Actividad 5
+
+index.html (desktop)
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Visual Musical Desktop</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.1/lib/p5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.1/lib/addons/p5.sound.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="sketch_desktop.js"></script>
+  </head>
+  <body>
+  </body>
+</html>
+
+```
+
+sketch_desktop.js
+
+```js
+let socket;
+let song, fft;
+let circles = [];
+
+let lastKickTime = 0;
+let lastBassTime = 0;
+let lastHighTime = 0;
+
+function preload() {
+  song = loadSound("song.mp3");
+}
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  background(20);
+
+  socket = io();
+
+  // ✅ Escucha toque del móvil
+  socket.on("touchEvent", (data) => {
+    console.log("👉 Toque recibido del móvil:", data);
+    analyzeFFT(); // genera círculo según sonido actual
+  });
+
+  // 🔊 Espera inicio de audio
+  userStartAudio().then(() => {
+    song.loop();
+    fft = new p5.FFT(0.8, 1024);
+  });
+}
+
+function draw() {
+  background(20, 20, 20, 80);
+  drawCircles();
+}
+
+function analyzeFFT() {
+  if (!fft) return;
+  let spectrum = fft.analyze();
+
+  let bass = fft.getEnergy("bass");
+  let mid = fft.getEnergy("mid");
+  let treble = fft.getEnergy("treble");
+
+  let now = millis();
+
+  console.log(`FFT -> bass:${bass} mid:${mid} treble:${treble}`);
+
+  // Detecta tipo de sonido actual y genera círculo en la sección correspondiente
+  if (bass > 200 && now - lastKickTime > 300) {
+    spawnCircle("K");
+    lastKickTime = now;
+  } else if (mid > 180 && now - lastBassTime > 400) {
+    spawnCircle("B");
+    lastBassTime = now;
+  } else if (treble > 190 && now - lastHighTime > 500) {
+    spawnCircle("A");
+    lastHighTime = now;
+  }
+}
+
+function spawnCircle(type) {
+  const colorMap = {
+    K: [0, 255, 255], // Cyan
+    B: [255, 255, 0], // Amarillo
+    A: [255, 0, 255], // Magenta
+  };
+
+  let sectionWidth = width / 3;
+  let sectionX =
+    type === "A" ? 0 : type === "B" ? sectionWidth : sectionWidth * 2;
+
+  let x = random(sectionX + 50, sectionX + sectionWidth - 50);
+  let y = random(100, height - 100);
+
+  circles.push({
+    x,
+    y,
+    color: colorMap[type],
+    radius: 30,
+    expanding: true,
+  });
+
+  socket.emit("spawnCircle", { x: x / width, y: y / height, color: type });
+  console.log(`💥 Círculo generado tipo ${type}`);
+}
+
+function drawCircles() {
+  for (let i = circles.length - 1; i >= 0; i--) {
+    let c = circles[i];
+    noFill();
+    stroke(c.color);
+    strokeWeight(3);
+    ellipse(c.x, c.y, c.radius);
+    c.radius += 10;
+    if (c.radius > width * 1.5) circles.splice(i, 1);
+  }
+}
+
+```
+
+index.html (mobile)
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Móvil - Control Musical</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.0/lib/p5.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="sketch_mobile.js"></script>
+  </head>
+  <body style="margin:0; overflow:hidden; background:#111;"></body>
+</html>
+
+```
+
+sketch_mobile.js
+
+```js
+let socket;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  background(30);
+  socket = io();
+
+  textAlign(CENTER, CENTER);
+  textSize(20);
+  fill(255);
+}
+
+function draw() {
+  background(30);
+  text("🎵 TOCA PARA CREAR ONDAS 🎵", width / 2, height / 2);
+}
+
+function touchStarted() {
+  socket.emit("touchEvent", { x: mouseX / width, y: mouseY / height });
+  console.log("📲 Enviado toque al servidor");
+  return false;
+}
+
+```
+
+server.js
+
+```js
+const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
+const path = require("path");
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
+const PORT = process.env.PORT || 3000;
+
+app.use(express.static("public"));
+
+io.on("connection", (socket) => {
+  console.log("🟢 Cliente conectado:", socket.id);
+
+  // Evento: escritorio detecta un beat o crea círculo
+  socket.on("spawnCircle", (data) => {
+    console.log("💠 spawnCircle desde desktop:", data);
+    socket.broadcast.emit("spawnCircle", data);
+  });
+
+  // Evento: móvil toca pantalla
+  socket.on("touchEvent", (data) => {
+    console.log("📱 touchEvent recibido:", data);
+    socket.broadcast.emit("touchEvent", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("🔴 Cliente desconectado:", socket.id);
+  });
+});
+
+server.listen(PORT, () => {
+  console.log(`Servidor escuchando en http://localhost:${PORT}`);
+});
+
+```
