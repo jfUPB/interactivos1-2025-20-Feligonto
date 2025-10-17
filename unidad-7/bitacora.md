@@ -110,7 +110,7 @@ Sirven para ver cuándo se conectan o desconectan clientes, monitorear los mensa
 
 El diseño que llevé a cabo fue primero idear la forma en que el usuario pudiese ineractuar con cada "beat" de la canción seleccionada, y las ondas expansivas me pareción un concepto visualmente satisfactorio. La forma que pensé de identificar estos beats era por medio del análisis FFT (Fast Fourier Transform) contenido en la libreria p5.sound, y la forma de diferenciar los componentes altos  y bajos fuese por medio de los colores de las mimas ondas expansivas. Estas ondas aparecerian en un lugar aleatorio entre un espacio designado para los altos o para los bajos según corresponda.
 
-index.html (desktop)
+**index.html (desktop)**
 
 ```html
 <!DOCTYPE html>
@@ -129,7 +129,7 @@ index.html (desktop)
 
 ```
 
-sketch_desktop.js
+**sketch_desktop.js**
 
 ```js
 let socket;
@@ -251,7 +251,7 @@ function drawCircles() {
 }
 ```
 
-index.html (mobile)
+**index.html (mobile)**
 
 ```html
 <!DOCTYPE html>
@@ -268,7 +268,7 @@ index.html (mobile)
 
 ```
 
-sketch_mobile.js
+**sketch_mobile.js**
 
 ```js
 let socket;
@@ -296,7 +296,7 @@ function touchStarted() {
 
 ```
 
-server.js
+**server.js**
 
 ```js
 const express = require("express");
@@ -349,5 +349,6 @@ server.listen(PORT, () => {
 **Actividad 4:** El gráfico representa de forma simple y sencilla, el flujo de datos a traves de los tres componentes: móvil, servidor y escritorio.
 
 Todas las actividades fueron llevadas a cabo satisfactoriamente, por lo que la nota sugerida es 5.
+
 
 
