@@ -136,9 +136,10 @@ let socket;
 let song, fft;
 let circles = [];
 
-let lastKickTime = 0;
-let lastBassTime = 0;
-let lastHighTime = 0;
+// Variables para normalización
+let avgBass = 100;
+let avgMid = 100;
+let avgTreble = 100;
 
 function preload() {
   song = loadSound("song.mp3");
@@ -150,16 +151,14 @@ function setup() {
 
   socket = io();
 
-  // ✅ Escucha toque del móvil
-  socket.on("touchEvent", (data) => {
-    console.log("👉 Toque recibido del móvil:", data);
-    analyzeFFT(); // genera círculo según sonido actual
+  // Al tocar el móvil, se analiza el sonido actual y se genera una onda según el rango predominante
+  socket.on("touchEvent", () => {
+    if (song && song.isPlaying()) analyzeFFT();
   });
 
-  // 🔊 Espera inicio de audio
   userStartAudio().then(() => {
     song.loop();
-    fft = new p5.FFT(0.8, 1024);
+    fft = new p5.FFT(0.8, 2048);
   });
 }
 
@@ -168,41 +167,60 @@ function draw() {
   drawCircles();
 }
 
+// ---------------------------------------------------
+// Analiza el espectro FFT al instante del toque móvil
+// ---------------------------------------------------
 function analyzeFFT() {
-  if (!fft) return;
   let spectrum = fft.analyze();
-
   let bass = fft.getEnergy("bass");
   let mid = fft.getEnergy("mid");
   let treble = fft.getEnergy("treble");
 
-  let now = millis();
+  // Suavizado dinámico de promedios (tipo "moving average")
+  avgBass = lerp(avgBass, bass, 0.05);
+  avgMid = lerp(avgMid, mid, 0.05);
+  avgTreble = lerp(avgTreble, treble, 0.05);
 
-  console.log(`FFT -> bass:${bass} mid:${mid} treble:${treble}`);
+  let type = null;
 
-  // Detecta tipo de sonido actual y genera círculo en la sección correspondiente
-  if (bass > 200 && now - lastKickTime > 300) {
-    spawnCircle("K");
-    lastKickTime = now;
-  } else if (mid > 180 && now - lastBassTime > 400) {
-    spawnCircle("B");
-    lastBassTime = now;
-  } else if (treble > 190 && now - lastHighTime > 500) {
-    spawnCircle("A");
-    lastHighTime = now;
+  // 🔧 Umbrales dinámicos más balanceados:
+  if (bass > avgBass * 1.3 && bass > mid && bass > treble) {
+    type = "K"; // Kick - Cyan
+  } else if (mid > avgMid * 1.15 && mid > bass && mid >= treble) {
+    type = "B"; // Bajo - Amarillo
+  } else if (treble > avgTreble * 1.05 && treble > mid && treble > bass) {
+    type = "A"; // Alto - Magenta
+  } else {
+    // fallback: elige el rango con más energía relativa
+    const maxVal = Math.max(bass / avgBass, mid / avgMid, treble / avgTreble);
+    if (maxVal === bass / avgBass) type = "K";
+    else if (maxVal === mid / avgMid) type = "B";
+    else type = "A";
   }
+
+  spawnCircle(type);
+
+  // Mostrar valores en consola para análisis
+  console.log(
+    `🎵 bass:${bass.toFixed(1)} mid:${mid.toFixed(1)} treble:${treble.toFixed(1)} → ${type}`
+  );
 }
 
+// ---------------------------------------------------
+// Crea una onda expansiva en el espacio correspondiente
+// ---------------------------------------------------
 function spawnCircle(type) {
-  const colorMap = {
-    K: [0, 255, 255], // Cyan
-    B: [255, 255, 0], // Amarillo
-    A: [255, 0, 255], // Magenta
+  let colorMap = {
+    K: [0, 255, 255],   // Cyan
+    B: [255, 255, 0],   // Amarillo
+    A: [255, 0, 255],   // Magenta
   };
 
   let sectionWidth = width / 3;
   let sectionX =
-    type === "A" ? 0 : type === "B" ? sectionWidth : sectionWidth * 2;
+    type === "A" ? 0 :
+    type === "B" ? sectionWidth :
+    sectionWidth * 2;
 
   let x = random(sectionX + 50, sectionX + sectionWidth - 50);
   let y = random(100, height - 100);
@@ -214,11 +232,11 @@ function spawnCircle(type) {
     radius: 30,
     expanding: true,
   });
-
-  socket.emit("spawnCircle", { x: x / width, y: y / height, color: type });
-  console.log(`💥 Círculo generado tipo ${type}`);
 }
 
+// ---------------------------------------------------
+// Dibuja las ondas expansivas
+// ---------------------------------------------------
 function drawCircles() {
   for (let i = circles.length - 1; i >= 0; i--) {
     let c = circles[i];
@@ -226,11 +244,11 @@ function drawCircles() {
     stroke(c.color);
     strokeWeight(3);
     ellipse(c.x, c.y, c.radius);
-    c.radius += 10;
+    c.radius += 8;
+
     if (c.radius > width * 1.5) circles.splice(i, 1);
   }
 }
-
 ```
 
 index.html (mobile)
@@ -331,4 +349,5 @@ server.listen(PORT, () => {
 **Actividad 4:** El gráfico representa de forma simple y sencilla, el flujo de datos a traves de los tres componentes: móvil, servidor y escritorio.
 
 Todas las actividades fueron llevadas a cabo satisfactoriamente, por lo que la nota sugerida es 5.
+
 
